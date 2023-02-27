@@ -5,6 +5,8 @@ const formElement = document.querySelector('.feedback-form');
 const formData = {};
 console.log(formData);
 
+const STORAGE_KEY = 'feedback-form-state';
+
 formElement.addEventListener('input', throttle(onFormImput), 500);
 formElement.addEventListener('submit', onFormSubmit);
 
@@ -21,21 +23,21 @@ function onFormSubmit(evt) {
     };
     console.log({ 'Email': email.value, 'Message': message.value });
     formElement.reset();
-    localStorage.removeItem('feedback-form-state');
+    localStorage.removeItem(STORAGE_KEY);
 }
 
 function onFormImput(evt) {
     formData[evt.target.name] = evt.target.value;
-    localStorage.setItem('feedback-form-state', JSON.stringify(formData));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
     console.log(formData);
 }
 
 function populateFormElement() {
 
-    if (localStorage.getItem('feedback-form-state') === null) {
+    if (localStorage.getItem(STORAGE_KEY) === null) {
         return;
     }
-    const savedForm = JSON.parse(localStorage.getItem('feedback-form-state'));
+    const savedForm = JSON.parse(localStorage.getItem(STORAGE_KEY));
 
     Object.entries(savedForm).forEach(([name, value]) => {
         formData[name] = value;
